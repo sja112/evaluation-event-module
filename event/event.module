@@ -1,0 +1,54 @@
+<?php
+
+/**
+ * @file
+ * This is event module file. It defines custom methods.
+ */
+
+/**
+ * Hook theme.
+ */
+function event_theme() {
+  $events = [];
+  return [
+    'node__event' => [
+      'template' => 'node--event',
+      'base hook' => 'node',
+    ],
+    'block__event_subscribers_list' => [
+      'template' => 'block--event-subscribers-list',
+      'base hook' => 'block',
+      'variables' => [
+        'events' => $events,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Hook preprocess node to add javascript.
+ */
+function event_preprocess_node(&$variables) {
+  $node = $variables['node'];
+  // Get node type.
+  $type = $node->getType();
+  if ($type === 'event') {
+    // Attach JS to the event node.
+    $variables['#attached']['library'][] = 'event/event';
+    // Get current user ID.
+    $user_id = \Drupal::service('current_user')->id();
+    $variables['#cache']['max-age'] = 0;
+    $node_ids = [];
+    if (db_table_exists('event_subscription_table')) {
+      $sql = db_select('event_subscription_table', 'event');
+      $sql->fields('event', ['nid']);
+      $sql->condition('event.user_id', $user_id);
+      $result = $sql->execute()->fetchAll();
+      // Get all the subscribed node IDs for current user.
+      foreach ($result as $key => $value) {
+        $node_ids[] = $value->nid;
+      }
+      $variables['node_ids'] = $node_ids;
+    }
+  }
+}

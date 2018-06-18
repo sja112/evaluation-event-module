@@ -1,0 +1,53 @@
+<?php
+
+ /**
+  * @file
+  * Install, schema, and uninstall functions for the First View module.
+  */
+
+/**
+ * Implements hook_schema().
+ */
+function event_schema() {
+  $schema['event_subscription_table'] = [
+    'description' => 'The base table for event subscription records',
+    'fields' => [
+      'id' => [
+        'description' => 'The report table for event.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'nid' => [
+        'description' => 'Event node ID records',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'event_subscription_success' => [
+        'description' => 'Event subscription success records',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'user_id' => [
+        'description' => 'Event subscriber user ID records',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'timestamp' => [
+        'description' => 'The timestamp of subscription',
+        'mysql_type' => 'timestamp',
+        'not null' => TRUE,
+      ],
+    ],
+    'unique keys' => [
+      'id' => ['id'],
+    ],
+    'primary key' => ['id'],
+  ];
+  return $schema;
+}

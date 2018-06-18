@@ -1,0 +1,4 @@
+event:
+  version: VERSION
+  js:
+    js/event.js: {}    

@@ -1,0 +1,4 @@
+name: Event
+description: 'Provides Event content type and related configuration. This can be used to create event nodes to show the user event details.'
+type: module
+core: 8.x
